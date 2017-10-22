@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class BrickBlock : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	private SpriteRenderer sr;
+
+	public Sprite explodedBlock;
+
+	public float secBeforeSpriteChange = 0.2f;
+
+
+	void Awake(){
+		sr = GetComponent<SpriteRenderer> ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void OnCollisionEnter2D(Collision2D col){
+		if(col.contacts[0].point.y < transform.position.y){
+			SoundManager.Instance.PlayOneShot(SoundManager.Instance.rockSmash);
+
+			sr.sprite = explodedBlock;
+			DestroyObject(gameObject, secBeforeSpriteChange);
+		}
 	}
 }

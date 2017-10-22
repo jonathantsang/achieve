@@ -100,7 +100,9 @@
 -define:UNITY_EDITOR_OSX
 -define:ENABLE_NATIVE_ARRAY_CHECKS
 -define:UNITY_TEAM_LICENSE
+'Assets/scripts/BrickBlock.cs'
 'Assets/scripts/CameraMove.cs'
+'Assets/scripts/Coin.cs'
 'Assets/scripts/Manny.cs'
 'Assets/scripts/PrizeBlock.cs'
 'Assets/scripts/SoundManager.cs'

@@ -5,13 +5,13 @@ using UnityEngine;
 public class Manny : MonoBehaviour {
 
 	// Defines Mannys speed horizontally
-	public float speed = 5;
+	public float speed = 4;
 
 	// Defines Mannys facing direction
 	public bool facingRight = true;
 
 	// Jump speed
-	public float jumpSpeed = 5f;
+	public float jumpSpeed = 4f;
 
 	// Mannys components
 	private SpriteRenderer sr;
@@ -37,6 +37,8 @@ public class Manny : MonoBehaviour {
 	// Max jump amount
 	public float maxJumpTime = 0.2f;
 
+	private float wallJumpY = 5f;
+
 	void FixedUpdate(){
 
 		// Get horizontal movement -1 Left, or 1 Right
@@ -47,6 +49,10 @@ public class Manny : MonoBehaviour {
 
 		// Change x and keep y as is
 		rb.velocity = new Vector2 (horzMove * speed, vect.y);
+
+		if (IsWallOnLeftOrRight() && !IsOnGround() && horzMove == 1) {
+			rb.velocity = new Vector2 (-GetWallDirection () * speed * 0.5f, wallJumpY);
+		}
 
 		// Set the speed so the right Animation is played
 		animator.SetFloat("Speed", Mathf.Abs(horzMove));
@@ -64,6 +70,7 @@ public class Manny : MonoBehaviour {
 		if (IsOnGround () && isJumping == false) {
 			if (vertMove > 0f) {
 				isJumping = true;
+				SoundManager.Instance.PlayOneShot (SoundManager.Instance.jump);
 			}
 		}
 
@@ -144,12 +151,35 @@ public class Manny : MonoBehaviour {
 	}
 
 	// If Manny falls off the screen destroy the game object
-	/*
 	void OnBecameInvisible(){
 		Debug.Log ("Manny Destroyed");
 		Destroy (gameObject);
 	}
-	*/
 
+	public bool IsWallOnLeft(){
+		return Physics2D.Raycast (new Vector2 (transform.position.x - width, transform.position.y), -Vector2.right, rayCastLength);
+	}
+
+	public bool IsWallOnRight(){
+		return Physics2D.Raycast (new Vector2 (transform.position.x + width, transform.position.y), Vector2.right, rayCastLength);
+	}
+
+	public bool IsWallOnLeftOrRight(){
+		if(IsWallOnLeft() || IsWallOnRight()){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public int GetWallDirection(){
+		if (IsWallOnLeft()) {
+			return -1;
+		} else if (IsWallOnRight()) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 
 }
