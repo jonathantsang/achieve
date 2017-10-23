@@ -4,30 +4,51 @@ using UnityEngine;
 
 public class Snail : MonoBehaviour {
 
-	public float speed = 2f;
+	// Snail speed
+	public float speed = 2;
+
+	// Snail Direction
 	Vector2 direction = Vector2.right;
 
 	void FixedUpdate(){
+
+		// Move the snail
 		GetComponent<Rigidbody2D> ().velocity = direction * speed;
+
 	}
-		
+
 	void OnTriggerEnter2D(Collider2D col){
-		transform.localScale = new Vector2 (-1 * transform.localScale.x, transform.localScale.y);
+
+		// If you hit SnailStart & SnailEnd flip direction
+		transform.localScale = new Vector2 (-1 * transform.localScale.x,
+			transform.localScale.y);
 
 		direction = new Vector2 (-1 * direction.x, direction.y);
+
 	}
 
+	// If Manny hits the top of the snail kill the snail
+	// and otherwise kill Manny
 	void OnCollisionEnter2D(Collision2D col){
 		if (col.gameObject.name == "Manny") {
-			if (col.contacts [0].point.y > transform.position.y) {
+
+			// If hit from above play dead animation, remove
+			// the collider so the snail falls off the screen
+			// and kill Snail after 3 seconds
+			float adjust = 0.3f;
+			if (col.contacts [0].point.y + adjust > transform.position.y) {
+
 				GetComponent<Animator> ().SetTrigger ("Dead");
 				GetComponent<Collider2D> ().enabled = false;
 				direction = new Vector2 (direction.x, -1);
 				DestroyObject (gameObject, 3);
+
 			} else {
+				// Kill manny
 				SoundManager.Instance.PlayOneShot (SoundManager.Instance.mannyDies);
-				DestroyObject (col.gameObject, 0.5f);
+				DestroyObject (col.gameObject, .2f);
 			}
 		}
 	}
+
 }

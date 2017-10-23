@@ -54,7 +54,6 @@
      <Compile Include="Assets\scripts\BrickBlock.cs" />
      <Compile Include="Assets\scripts\CameraMove.cs" />
      <Compile Include="Assets\scripts\Coin.cs" />
-     <Compile Include="Assets\scripts\Manny.cs" />
      <Compile Include="Assets\scripts\PrizeBlock.cs" />
      <Compile Include="Assets\scripts\Snail.cs" />
      <Compile Include="Assets\scripts\SoundManager.cs" />
